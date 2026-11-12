@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Conectando…</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<main>
+  <h1>Conectando ao clipper…</h1>
+  <p id="msg">Voltando para o clipper no seu computador.</p>
+</main>
+<script>
+  // O TikTok exige um endereço https de retorno. Esta página só repassa o código de autorização,
+  // dentro do seu próprio navegador, para o clipper rodando em http://localhost (nada é enviado a servidor).
+  // A porta pode ser trocada com ?port= no endereço registrado no TikTok, se você mudar a porta do clipper.
+  var q = new URLSearchParams(location.search);
+  var port = /^\d{2,5}$/.test(q.get("port") || "") ? q.get("port") : "8765";
+  q.delete("port");
+  if (!q.get("code") && !q.get("error")) {
+    document.getElementById("msg").textContent = "Nenhum código de autorização recebido. Volte ao clipper e clique em Conectar.";
+  } else {
+    location.replace("http://localhost:" + port + "/oauth/tiktok/callback?" + q.toString());
+  }
+</script>
+</body>
+</html>
